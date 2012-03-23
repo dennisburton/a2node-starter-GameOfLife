@@ -1,12 +1,18 @@
 var io = require('socket.io').listen(8080);
 
-io.sockets.on('connection', function (socket) {
-  socket.emit('processBoard', { id: {foo:"bar"}, neighbors: [1,1,1,1,1,1,1,1], isAlive: 1});
+function getPayload() {
+    return { id: {foo:"bar"}, neighbors: [(Math.random() > 0.5),(Math.random() > 0.5),(Math.random() > 0.5),(Math.random() > 0.5),(Math.random() > 0.5),(Math.random() > 0.5),(Math.random() > 0.5),(Math.random() > 0.5)], isAlive: 1};
+}
 
-  socket.on('boardProcessed', function(data) {
-	  console.log("Woot board processed!");
-	  console.log(data);
-	 });
+io.sockets.on('connection', function (socket) {
+
+  socket.emit('processCell', getPayload());
+
+
+  socket.on('cellProcessed', function(data) {
+    console.log('processed!', data);
+    socket.emit('processCell', getPayload());
+  });
 
 });
 
