@@ -1,4 +1,5 @@
-var io = require('socket.io-client');
+var io = require('socket.io-client'),
+	_ = require('underscore');
 
 
 
@@ -14,9 +15,20 @@ var golClient = (function() {
 			console.log('connected!');
 		},
 
-		processBoard: function(payload) {
-			console.log('Cell is alive, returning status');
-			socket.emit('cellProcessed', { id: payload.id, isAlive: 1 });
+
+		processCell: function(payload) {
+			var aliveNeighbors = _.reduce(payload.neighbors, function(memo, num) { return memo + num; }, 0),
+				outcomeIsAlive;
+
+			if (payload.isAlive) {
+				outcomeIsAlive = (aliveNeighbors === 2 || aliveNeighbors === 3);
+			} else {
+				outcomeIsAlive = (aliveNeighbors === 3);
+			}
+
+			console.log(payload, aliveNeighbors, outcomeIsAlive);
+
+			socket.emit('cellProcessed', { id: payload.id, isAlive: outcomeIsAlive });
 		}
 
 	};
