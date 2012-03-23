@@ -3,11 +3,11 @@ var io = require('socket.io-client');
 
 
 var golClient = (function() {
-	var socket = io.connect('http://localhost:8080');
+	var socket = io.connect('http://localhost:8080/worker');
 	return {
 		start: function() {
 			socket.on('connect', this.didConnect);
-			socket.on('processBoard', this.processBoard);
+			socket.on('processCell', this.processBoard);
 		},
 
 		didConnect: function() {
@@ -16,7 +16,7 @@ var golClient = (function() {
 
 		processBoard: function(payload) {
 			console.log('Cell is alive, returning status');
-			socket.emit('boardProcessed', { id: payload.id, isAlive: 1 });
+			socket.emit('cellProcessed', { id: payload.id, isAlive: 1 });
 		}
 
 	};

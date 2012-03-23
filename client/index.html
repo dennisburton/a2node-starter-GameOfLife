@@ -1,0 +1,14 @@
+<html>
+  <head>
+    <script src="http://localhost:8080/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io.connect("http://localhost:8080/worker");
+      socket.on('processCell', function(cellInfo) {
+        console.log('got some stuff to process' + JSON.stringify(cellInfo));
+      });
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
+
